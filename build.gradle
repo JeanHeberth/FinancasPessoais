@@ -32,10 +32,11 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
+    testImplementation 'org.testng:testng:7.9.0'
+    testImplementation 'org.mockito:mockito-core:5.12.0'
 
-tasks.named('test') {
-    useJUnitPlatform()
+
+    tasks.named('test') {
+        useTestNG()
+    }
 }

@@ -11,6 +11,7 @@ spring:
       database: controle-gastos
 
   jackson:
+    time-zone: UTC
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
 
