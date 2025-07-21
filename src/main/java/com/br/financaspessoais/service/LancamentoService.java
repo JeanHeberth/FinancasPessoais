@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public class LancamentoService {
         return lancamentoRepository.findByUsuarioId(usuarioId);
     }
 
-    public List<Lancamento> listarPorPeriodo(String usuarioId, LocalDate inicio, LocalDate fim) {
+    public List<Lancamento> listarPorPeriodo(String usuarioId, LocalDateTime inicio, LocalDateTime fim) {
         return lancamentoRepository.findByUsuarioIdAndDataBetween(usuarioId, inicio, fim);
     }
 

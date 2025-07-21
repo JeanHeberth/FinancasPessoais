@@ -1,0 +1,97 @@
+package com.br.financaspessoais.repository;
+
+import com.br.financaspessoais.enums.TipoLancamento;
+import com.br.financaspessoais.model.Lancamento;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.List;
+
+import static org.testng.Assert.*;
+
+@SpringBootTest
+public class LancamentoRepositoryIT extends AbstractTestNGSpringContextTests {
+
+    @Autowired
+    private LancamentoRepository lancamentoRepository;
+
+    @BeforeMethod
+    public void limparBanco() {
+        assertNotNull(lancamentoRepository, "lancamentoRepository não foi injetado");
+        lancamentoRepository.deleteAll();
+    }
+
+    @Test
+    public void deveSalvarEListarLancamentosPorUsuario() {
+        String usuarioId = "123";
+
+        Lancamento lancamento = Lancamento.builder()
+                .descricao("Conta de Luz")
+                .valor(BigDecimal.valueOf(200.00))
+                .data(LocalDateTime.now())
+                .tipo(TipoLancamento.SAIDA)
+                .categoria("Contas")
+                .usuarioId(usuarioId)
+                .build();
+
+        lancamentoRepository.save(lancamento);
+
+        List<Lancamento> resultados = lancamentoRepository.findByUsuarioId(usuarioId);
+
+        assertFalse(resultados.isEmpty());
+        assertEquals(resultados.get(0).getDescricao(), "Conta de Luz");
+    }
+
+    @Test
+    public void deveBuscarLancamentosPorPeriodo() {
+        String usuarioId = "456";
+
+        lancamentoRepository.save(Lancamento.builder()
+                .descricao("Salário")
+                .valor(BigDecimal.valueOf(3000))
+                .data(LocalDateTime.of(2025, 7, 1, 10, 0)) // horário arbitrário
+                .tipo(TipoLancamento.ENTRADA)
+                .categoria("Renda")
+                .usuarioId(usuarioId)
+                .build());
+
+        lancamentoRepository.save(Lancamento.builder()
+                .descricao("Mercado")
+                .valor(BigDecimal.valueOf(500))
+                .data(LocalDateTime.of(2025, 7, 10, 15, 30))
+                .tipo(TipoLancamento.SAIDA)
+                .categoria("Alimentação")
+                .usuarioId(usuarioId)
+                .build());
+
+        LocalDateTime inicio = LocalDateTime.of(2025, 7, 1, 0, 0);
+        LocalDateTime fim = LocalDateTime.of(2025, 7, 31, 23, 59, 59);
+
+        List<Lancamento> resultados = lancamentoRepository.findByUsuarioIdAndDataBetween(
+                usuarioId,
+                inicio,
+                fim
+        );
+
+        resultados.forEach(l -> {
+            System.out.println(">>> Lançamento retornado:");
+            System.out.println("Descrição: " + l.getDescricao());
+            System.out.println("Data: " + l.getData());
+            System.out.println("Tipo: " + l.getTipo());
+            System.out.println("Usuário: " + l.getUsuarioId());
+            System.out.println("---");
+        });
+
+        assertEquals(resultados.size(), 2); // Agora deve funcionar corretamente
+    }
+
+
+
+}
