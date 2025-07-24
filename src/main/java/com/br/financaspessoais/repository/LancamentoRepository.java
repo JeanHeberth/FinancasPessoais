@@ -3,7 +3,6 @@ package com.br.financaspessoais.repository;
 import com.br.financaspessoais.model.Lancamento;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
