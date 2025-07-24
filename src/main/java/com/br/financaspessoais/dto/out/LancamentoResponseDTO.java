@@ -6,13 +6,11 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class LancamentoResponseDTO {
 
-    private String id;
     private String descricao;
     private BigDecimal valor;
     private LocalDateTime data;
@@ -21,13 +19,6 @@ public class LancamentoResponseDTO {
     private String usuarioId;
 
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getDescricao() {
         return descricao;

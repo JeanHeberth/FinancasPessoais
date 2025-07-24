@@ -1,7 +1,10 @@
 package com.br.financaspessoais.controller;
 
+import com.br.financaspessoais.dto.in.UsuarioRequestDTO;
+import com.br.financaspessoais.dto.out.UsuarioResponseDTO;
 import com.br.financaspessoais.model.Usuario;
-import com.br.financaspessoais.repository.UsuarioRepository;
+import com.br.financaspessoais.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,31 +17,16 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
-        return ResponseEntity.ok(usuarioRepository.save(usuario));
+    public ResponseEntity<UsuarioResponseDTO> criarUsuario(@RequestBody @Valid UsuarioRequestDTO usuarioRequestDTO) {
+        return ResponseEntity.ok(usuarioService.salvar(usuarioRequestDTO));
     }
 
     @GetMapping
-    public List<Usuario> listarUsuarios() {
-        return usuarioRepository.findAll();
+    public List<UsuarioResponseDTO> listarUsuarios() {
+        return usuarioService.listarUsuarios();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable String id) {
-        return usuarioRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable String id) {
-        if (usuarioRepository.existsById(id)) {
-            usuarioRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
-    }
 }

@@ -3,6 +3,7 @@ package com.br.financaspessoais.controller;
 import com.br.financaspessoais.dto.in.LancamentoRequestDTO;
 import com.br.financaspessoais.dto.out.LancamentoResponseDTO;
 import com.br.financaspessoais.service.LancamentoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class LancamentoController {
     private LancamentoService lancamentoService;
 
     @PostMapping
-    public ResponseEntity<LancamentoResponseDTO> criarLancamento(@RequestBody LancamentoRequestDTO lancamentoRequestDto) {
+    public ResponseEntity<LancamentoResponseDTO> criarLancamento(@RequestBody @Valid LancamentoRequestDTO lancamentoRequestDto) {
         return ResponseEntity.ok(lancamentoService.salvar(lancamentoRequestDto));
     }
 
@@ -46,7 +47,7 @@ public class LancamentoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LancamentoResponseDTO> atualizar(@PathVariable String id, @RequestBody LancamentoRequestDTO lancamentoRequestDto) {
+    public ResponseEntity<LancamentoResponseDTO> atualizar(@PathVariable @Valid String id, @RequestBody LancamentoRequestDTO lancamentoRequestDto) {
         return ResponseEntity.ok(lancamentoService.atualizar(id,lancamentoRequestDto));
     }
 }
