@@ -1,4 +1,4 @@
-package com.br.financaspessoais.dto.in;
+package com.br.financaspessoais.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
