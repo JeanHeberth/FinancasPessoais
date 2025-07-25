@@ -1,63 +1,57 @@
-//package com.br.financaspessoais.service;
-//
-//import com.br.financaspessoais.model.Usuario;
-//import com.br.financaspessoais.repository.UsuarioRepository;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.MockitoAnnotations;
-//import org.testng.annotations.BeforeMethod;
-//import org.testng.annotations.Test;
-//
-//import java.util.Optional;
-//
-//import static org.mockito.Mockito.*;
-//import static org.testng.Assert.assertNotNull;
-//import static org.testng.Assert.assertTrue;
-//import static org.testng.AssertJUnit.assertEquals;
-//
-//public class UsuarioServiceTest {
-//
-//    @Mock
-//    private UsuarioRepository usuarioRepository;
-//
-//    @InjectMocks
-//    private UsuarioService usuarioService;
-//
-//    @BeforeMethod
-//    public void setUp() {
-//        MockitoAnnotations.openMocks(this);
-//    }
-//
-//    @Test
-//    public void deveSalvarUsuarioComSucesso() {
-//        Usuario usuario = Usuario.builder()
-//                .nome("Jean")
-//                .email("jean@exemplo.com")
-//                .senha("123456")
-//                .build();
-//
-//        when(usuarioRepository.save(usuario)).thenReturn(usuario);
-//
-//        Usuario salvo = usuarioService.salvar(usuario);
-//
-//        assertNotNull(salvo);
-//        assertEquals(salvo.getNome(), "Jean");
-//        verify(usuarioRepository, times(1)).save(usuario);
-//    }
-//
-//    @Test
-//    public void deveBuscarUsuarioPorEmail() {
-//        Usuario usuario = Usuario.builder()
-//                .nome("Jean")
-//                .email("jean@exemplo.com")
-//                .senha("123456")
-//                .build();
-//
-//        when(usuarioRepository.findByEmail("jean@exemplo.com")).thenReturn(Optional.of(usuario));
-//
-//        Optional<Usuario> resultado = usuarioService.buscarPorEmail("jean@exemplo.com");
-//
-//        assertTrue(resultado.isPresent());
-//        assertEquals(resultado.get().getNome(), "Jean");
-//    }
-//}
+package com.br.financaspessoais.service;
+
+import com.br.financaspessoais.dto.in.UsuarioRequestDTO;
+import com.br.financaspessoais.dto.out.UsuarioResponseDTO;
+import com.br.financaspessoais.mapper.UsuarioMapper;
+import com.br.financaspessoais.model.Usuario;
+import com.br.financaspessoais.repository.UsuarioRepository;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+
+public class UsuarioServiceTest {
+
+    private final UsuarioRepository usuarioRepository = mock(UsuarioRepository.class);
+    private final UsuarioMapper usuarioMapper = mock(UsuarioMapper.class);
+
+    private final UsuarioService usuarioService = new UsuarioService(usuarioRepository, usuarioMapper);
+
+    @Test
+    void deveSalvarSenhaCriptografada() {
+        // Arrange
+        UsuarioRequestDTO dto = new UsuarioRequestDTO();
+        dto.setNome("João");
+        dto.setEmail("joao@email.com");
+        dto.setSenha("123456");
+
+        Usuario usuarioConvertido = new Usuario();
+        usuarioConvertido.setNome(dto.getNome());
+        usuarioConvertido.setEmail(dto.getEmail());
+        usuarioConvertido.setSenha(dto.getSenha());
+
+        when(usuarioMapper.toEntity(dto)).thenReturn(usuarioConvertido);
+        when(usuarioRepository.save(any(Usuario.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(usuarioMapper.toResponseDTO(any())).thenReturn(UsuarioResponseDTO.builder()
+                .nome("João")
+                .email("joao@email.com")
+                .build());
+
+        // Act
+        UsuarioResponseDTO response = usuarioService.salvar(dto);
+
+        // Assert
+        ArgumentCaptor<Usuario> captor = ArgumentCaptor.forClass(Usuario.class);
+        verify(usuarioRepository).save(captor.capture());
+
+        Usuario usuarioSalvo = captor.getValue();
+
+        assertThat(usuarioSalvo.getSenha()).isNotBlank();
+        assertThat(usuarioSalvo.getSenha()).isNotEqualTo(dto.getSenha());
+        assertThat(BCrypt.checkpw(dto.getSenha(), usuarioSalvo.getSenha())).isTrue();
+    }
+
+
+}
