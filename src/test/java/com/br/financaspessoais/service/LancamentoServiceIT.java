@@ -1,13 +1,11 @@
 package com.br.financaspessoais.service;
 
-import com.br.financaspessoais.config.MongoTestConfig;
 import com.br.financaspessoais.dto.out.LancamentoResponseDTO;
 import com.br.financaspessoais.mapper.LancamentoMapper;
 import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.model.Usuario;
 import com.br.financaspessoais.repository.LancamentoRepository;
 import com.br.financaspessoais.repository.UsuarioRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +21,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = {MongoTestConfig.class})
 @AutoConfigureMockMvc
+@SpringBootTest
+@ActiveProfiles("test")
 public class LancamentoServiceIT {
 
     @Autowired

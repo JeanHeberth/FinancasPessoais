@@ -1,10 +1,25 @@
 spring:
   data:
     mongodb:
-      database: financas-testes
-      port: 0
+      host: localhost
+      port: 27017
+      database: financas-test
+      auto-index-creation: true
+      auto-create-collection: true
+      auto-index-creation-drop-collection: true
+  
+  main:
+    banner-mode: "off"
+
+embedded:
+  mongodb:
+    enabled: true
+    version: 6.0.5
+    features: ["sync_delay", "no_http_interface_arg", "no_prealloc", "no_journal"]
+
 logging:
   level:
     org.springframework: WARN
     org.springframework.data.mongodb: DEBUG
+    de.flapdoodle.embed.mongo: INFO
     com.br.financaspessoais: DEBUG
