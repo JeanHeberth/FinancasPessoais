@@ -52,7 +52,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.11.0'
-    runtimeOnly 'com.h2database:h2'
 
 
     tasks.named('test') {
