@@ -34,7 +34,7 @@ jobs:
 
       - name: Upload Gradle problems report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: gradle-problems-report
           path: build/reports/problems/
@@ -56,7 +56,7 @@ jobs:
 
       - name: Upload Gradle problems report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: gradle-problems-report-controller
           path: build/reports/problems/
@@ -78,7 +78,7 @@ jobs:
 
       - name: Upload Gradle problems report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: gradle-problems-report-service
           path: build/reports/problems/
@@ -100,7 +100,7 @@ jobs:
 
       - name: Upload Gradle problems report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: gradle-problems-report-repository
           path: build/reports/problems/
