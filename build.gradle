@@ -24,37 +24,39 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.mapstruct:mapstruct:1.6.3'
-
-
-
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
-    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-
-
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
-
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // DevTools (somente para dev)
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Testes
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mockito:mockito-core:5.18.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.13.3'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.20.1'
-    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.memcached:1.06.4'
-
-
-    tasks.named('test') {
-        useJUnitPlatform()
-    }
 }
+
+test {
+    useJUnitPlatform()
+    systemProperty "spring.profiles.active", "test"
+}
+
