@@ -1,9 +1,9 @@
 spring:
   data:
     mongodb:
+      uri: mongodb://localhost:0/teste-fake # Força Spring a ignorar URI real e usar o Mongo embutido
       database: financas-testes
 
 logging:
   level:
     org.springframework: WARN
-
