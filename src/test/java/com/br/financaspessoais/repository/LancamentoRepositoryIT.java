@@ -2,55 +2,73 @@ package com.br.financaspessoais.repository;
 
 import com.br.financaspessoais.enums.TipoLancamento;
 import com.br.financaspessoais.model.Lancamento;
+import com.br.financaspessoais.model.Usuario;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class LancamentoRepositoryIT{
+@ActiveProfiles("test")
+public class LancamentoRepositoryIT {
 
     @Autowired
     private LancamentoRepository lancamentoRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    private Usuario usuario;
+
+    @BeforeEach
+    public void setUp() {
+        lancamentoRepository.deleteAll();
+        usuarioRepository.deleteAll();
+
+        usuario = Usuario.builder()
+                .nome("Usuário Teste")
+                .email("teste@email.com")
+                .senha("senha123")
+                .build();
+
+        usuario = usuarioRepository.save(usuario);
+    }
 
     @Test
     public void deveSalvarEListarLancamentosPorUsuario() {
-        String usuarioId = "123";
-
         Lancamento lancamento = Lancamento.builder()
                 .descricao("Conta de Luz")
                 .valor(BigDecimal.valueOf(200.00))
                 .data(LocalDateTime.now())
                 .tipo(TipoLancamento.SAIDA)
                 .categoria("Contas")
+                .usuario(usuario)
                 .build();
 
         lancamentoRepository.save(lancamento);
 
-        List<Lancamento> resultados = lancamentoRepository.findByUsuarioId(usuarioId);
+        List<Lancamento> resultados = lancamentoRepository.findByUsuarioId(usuario.getId());
 
         assertFalse(resultados.isEmpty());
-        assertEquals(resultados.get(0).getDescricao(), "Conta de Luz");
+        assertEquals("Conta de Luz", resultados.get(0).getDescricao());
     }
 
     @Test
     public void deveBuscarLancamentosPorPeriodo() {
-        String usuarioId = "456";
-
         lancamentoRepository.save(Lancamento.builder()
                 .descricao("Salário")
                 .valor(BigDecimal.valueOf(3000))
-                .data(LocalDateTime.of(2025, 7, 1, 10, 0)) // horário arbitrário
+                .data(LocalDateTime.of(2025, 7, 1, 10, 0))
                 .tipo(TipoLancamento.ENTRADA)
                 .categoria("Renda")
+                .usuario(usuario)
                 .build());
 
         lancamentoRepository.save(Lancamento.builder()
@@ -59,28 +77,18 @@ public class LancamentoRepositoryIT{
                 .data(LocalDateTime.of(2025, 7, 10, 15, 30))
                 .tipo(TipoLancamento.SAIDA)
                 .categoria("Alimentação")
+                .usuario(usuario)
                 .build());
 
         LocalDateTime inicio = LocalDateTime.of(2025, 7, 1, 0, 0);
         LocalDateTime fim = LocalDateTime.of(2025, 7, 31, 23, 59, 59);
 
         List<Lancamento> resultados = lancamentoRepository.findByUsuarioIdAndDataBetween(
-                usuarioId,
+                usuario.getId(),
                 inicio,
                 fim
         );
 
-        resultados.forEach(l -> {
-            System.out.println(">>> Lançamento retornado:");
-            System.out.println("Descrição: " + l.getDescricao());
-            System.out.println("Data: " + l.getData());
-            System.out.println("Tipo: " + l.getTipo());
-            System.out.println("---");
-        });
-
-        assertEquals(resultados.size(), 2); // Agora deve funcionar corretamente
+        assertEquals(2, resultados.size());
     }
-
-
-
 }
