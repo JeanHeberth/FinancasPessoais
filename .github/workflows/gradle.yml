@@ -52,7 +52,7 @@ jobs:
           java-version: '21'
 
       - name: Run controller tests
-        run: ./gradlew test --tests "*Controller*"
+        run: ./gradlew test --tests "*Controller*" -Dspring.profiles.active=test
 
       - name: Upload full Gradle test reports
         if: always()
@@ -75,7 +75,7 @@ jobs:
           java-version: '21'
 
       - name: Run service tests
-        run: ./gradlew test --tests "*Service*"
+        run: ./gradlew test --tests "*Service*" -Dspring.profiles.active=test
 
       - name: Upload Gradle problems report
         if: always()
@@ -97,7 +97,7 @@ jobs:
           java-version: '21'
 
       - name: Run repository tests
-        run: ./gradlew test --tests "*Repository*"
+        run: ./gradlew test --tests "*Repository*" -Dspring.profiles.active=test
 
       - name: Upload Gradle problems report
         if: always()
