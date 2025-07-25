@@ -1,5 +1,6 @@
 package com.br.financaspessoais.service;
 
+import com.br.financaspessoais.config.MongoTestConfig;
 import com.br.financaspessoais.dto.out.LancamentoResponseDTO;
 import com.br.financaspessoais.mapper.LancamentoMapper;
 import com.br.financaspessoais.model.Lancamento;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -21,8 +23,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@SpringBootTest(classes = {MongoTestConfig.class})
+@AutoConfigureMockMvc
 public class LancamentoServiceIT {
 
     @Autowired
@@ -42,7 +44,7 @@ public class LancamentoServiceIT {
 
     @BeforeEach
     void setup() {
-        System.out.println(">>> MongoDB em uso: " + mongoTemplate.getDb().getName());
+        System.out.println(">>> MongoDB em uso (final): " + mongoTemplate.getDb().getName());
 
         lancamentoRepository.deleteAll();
         usuarioRepository.deleteAll();

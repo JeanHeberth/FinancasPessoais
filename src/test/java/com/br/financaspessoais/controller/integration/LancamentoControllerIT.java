@@ -1,5 +1,6 @@
 package com.br.financaspessoais.controller.integration;
 
+import com.br.financaspessoais.config.MongoTestConfig;
 import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.model.Usuario;
 import com.br.financaspessoais.repository.LancamentoRepository;
@@ -24,9 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@SpringBootTest
+@SpringBootTest(classes = {MongoTestConfig.class})
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
 public class LancamentoControllerIT {
 
     @Autowired
@@ -44,7 +44,7 @@ public class LancamentoControllerIT {
 
     @BeforeEach
     public void setup() {
-        System.out.println(">>> MongoDB em uso: " + mongoTemplate.getDb().getName());
+        System.out.println(">>> MongoDB em uso (final): " + mongoTemplate.getDb().getName());
 
         lancamentoRepository.deleteAll();
         usuarioRepository.deleteAll();
