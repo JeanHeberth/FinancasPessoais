@@ -48,9 +48,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mockito:mockito-core:5.18.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.18.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.3'
     testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.5.2'
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.20.1'
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.memcached:1.06.4'
 
 
     tasks.named('test') {
