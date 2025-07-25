@@ -2,7 +2,7 @@ spring:
   data:
     mongodb:
       database: financas-testes
-      # O Flapdoodle usará uma instância em memória automaticamente
+      port: 0
 
   # Aumenta o tempo de espera de conexão com o MongoDB em memória (usado pelos testes)
   mongodb.embedded:
@@ -11,3 +11,5 @@ spring:
 logging:
   level:
     org.springframework: WARN
+    org.springframework.data.mongodb: DEBUG
+    com.br.financaspessoais: DEBUG
