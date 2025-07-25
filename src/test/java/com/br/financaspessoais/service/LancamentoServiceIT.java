@@ -19,7 +19,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@DataMongoTest
 @SpringBootTest
 @ActiveProfiles("test")
 public class LancamentoServiceIT {
