@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      database: financas-testes
+
+logging:
+  level:
+    org.springframework: WARN
+

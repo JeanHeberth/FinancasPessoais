@@ -8,10 +8,12 @@ import com.br.financaspessoais.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+@ActiveProfiles("test")
 public class UsuarioServiceTest {
 
     private final UsuarioRepository usuarioRepository = mock(UsuarioRepository.class);

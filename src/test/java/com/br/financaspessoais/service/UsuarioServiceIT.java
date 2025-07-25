@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class UsuarioServiceIT {
 
 
@@ -26,7 +28,7 @@ public class UsuarioServiceIT {
     @BeforeEach
     void limparBanco() {
         assertNotNull(usuarioRepository, "usuarioRepository não foi injetado");
-//        usuarioRepository.deleteAll();
+        usuarioRepository.deleteAll();
     }
 
     @Test

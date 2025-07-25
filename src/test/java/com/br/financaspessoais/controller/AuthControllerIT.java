@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -17,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 class AuthControllerIT {
 
     @Autowired
@@ -31,8 +33,8 @@ class AuthControllerIT {
 
         // Usuário com senha criptografada no banco
         Usuario usuario = new Usuario();
-        usuario.setNome("Maria");
-        usuario.setEmail("maria@email.com");
+        usuario.setNome("Joao");
+        usuario.setEmail("joao@email.com");
         usuario.setSenha(new BCryptPasswordEncoder().encode("senha123"));
 
         usuarioRepository.save(usuario);
@@ -42,7 +44,7 @@ class AuthControllerIT {
     void deveAutenticarEReceberTokenComCredenciaisValidas() throws Exception {
         String payload = """
                 {
-                    "email": "maria@email.com",
+                    "email": "joao@email.com",
                     "senha": "senha123"
                 }
                 """;
