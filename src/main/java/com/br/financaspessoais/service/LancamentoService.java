@@ -6,6 +6,7 @@ import com.br.financaspessoais.mapper.LancamentoMapper;
 import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.repository.LancamentoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LancamentoService {
 
     private final LancamentoRepository lancamentoRepository;
@@ -29,6 +31,7 @@ public class LancamentoService {
     }
 
     public LancamentoResponseDTO salvar(LancamentoRequestDTO lancamentoRequestDto) {
+        log.info("📦 Salvando no repositório: {}", lancamentoRequestDto);
         Lancamento lancamento = lancamentoMapper.toEntity(lancamentoRequestDto);
         return lancamentoMapper.toResponseDTO(lancamentoRepository.save(lancamento));
     }

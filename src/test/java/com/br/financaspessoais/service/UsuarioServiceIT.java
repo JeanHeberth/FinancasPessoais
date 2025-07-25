@@ -32,9 +32,6 @@ public class UsuarioServiceIT {
     @Test
     void deveSalvarUsuarioComSenhaCriptografadaNoBanco() {
 
-
-
-
         // Arrange
         UsuarioRequestDTO dto = new UsuarioRequestDTO();
         dto.setNome("Maria");
