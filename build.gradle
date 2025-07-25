@@ -35,7 +35,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
 
-    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
@@ -48,10 +47,11 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.mockito:mockito-core:5.12.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testImplementation 'org.mockito:mockito-core:5.18.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.3'
     testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.11.0'
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.20.1'
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.memcached:1.06.4'
 
 
     tasks.named('test') {
