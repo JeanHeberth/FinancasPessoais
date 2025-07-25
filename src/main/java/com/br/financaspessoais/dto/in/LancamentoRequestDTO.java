@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 public class LancamentoRequestDTO {
 
 
-
     @NotBlank(message = "Descrição é obrigatória")
     private String descricao;
 
@@ -32,10 +31,6 @@ public class LancamentoRequestDTO {
 
     @NotBlank(message = "Categoria é obrigatória")
     private String categoria;
-
-    @NotBlank(message = "Usuário é obrigatório")
-    private String usuarioId;
-
 
 
     public String getDescricao() {
@@ -78,11 +73,4 @@ public class LancamentoRequestDTO {
         this.categoria = categoria;
     }
 
-    public String getUsuarioId() {
-        return usuarioId;
-    }
-
-    public void setUsuarioId(String usuarioId) {
-        this.usuarioId = usuarioId;
-    }
 }
