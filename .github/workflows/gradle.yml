@@ -70,3 +70,11 @@ jobs:
           java-version: '21'
       - name: Run repository tests
         run: ./gradlew test --tests "*Repository*" -Dspring.profiles.active=test
+
+      - name: Upload Gradle problems report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: gradle-problems-report
+          path: build/reports/problems/
+
