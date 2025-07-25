@@ -1,8 +1,13 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:0/teste-nao-real?connectTimeoutMS=360000&socketTimeoutMS=360000
       database: financas-testes
+      # O Flapdoodle usará uma instância em memória automaticamente
+
+  # Aumenta o tempo de espera de conexão com o MongoDB em memória (usado pelos testes)
+  mongodb.embedded:
+    timeout: 3620000 # 20 segundos
+
 logging:
   level:
     org.springframework: WARN
