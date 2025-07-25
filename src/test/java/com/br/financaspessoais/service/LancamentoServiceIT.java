@@ -6,10 +6,12 @@ import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.model.Usuario;
 import com.br.financaspessoais.repository.LancamentoRepository;
 import com.br.financaspessoais.repository.UsuarioRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -35,8 +37,13 @@ public class LancamentoServiceIT {
     @Autowired
     private LancamentoMapper lancamentoMapper;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @BeforeEach
     void setup() {
+        System.out.println(">>> MongoDB em uso: " + mongoTemplate.getDb().getName());
+
         lancamentoRepository.deleteAll();
         usuarioRepository.deleteAll();
 
