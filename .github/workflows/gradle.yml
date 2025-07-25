@@ -54,12 +54,13 @@ jobs:
       - name: Run controller tests
         run: ./gradlew test --tests "*Controller*"
 
-      - name: Upload Gradle problems report
+      - name: Upload full Gradle test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gradle-problems-report-controller
-          path: build/reports/problems/
+          name: gradle-test-report-controller
+          path: build/reports/
+
 
   test-service:
     runs-on: ubuntu-latest
