@@ -1,9 +1,8 @@
 spring:
   data:
     mongodb:
-      port: 0
+      uri: mongodb://localhost:0/teste-nao-real?connectTimeoutMS=360000&socketTimeoutMS=360000
       database: financas-testes
-
 logging:
   level:
     org.springframework: WARN
