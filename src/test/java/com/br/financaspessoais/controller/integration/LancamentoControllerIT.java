@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -26,12 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@TestPropertySource(properties = {
-        "spring.data.mongodb.port=0",
-        "spring.data.mongodb.database=financas-testes",
-        "spring.data.mongodb.socket-timeout=3600000",
-        "spring.data.mongodb.connect-timeout=3600000"
-})
 public class LancamentoControllerIT {
 
     @Autowired
