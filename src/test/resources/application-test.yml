@@ -1,6 +1,7 @@
 spring:
   data:
     mongodb:
+      port: 0
       database: financas-testes
 
 logging:
