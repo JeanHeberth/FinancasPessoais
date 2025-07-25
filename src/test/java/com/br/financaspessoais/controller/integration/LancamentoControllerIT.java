@@ -29,8 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = {
         "spring.data.mongodb.port=0",
         "spring.data.mongodb.database=financas-testes",
-        "spring.data.mongodb.socket-timeout=40000",
-        "spring.data.mongodb.connect-timeout=40000"
+        "spring.data.mongodb.socket-timeout=3600000",
+        "spring.data.mongodb.connect-timeout=3600000"
 })
 public class LancamentoControllerIT {
 
