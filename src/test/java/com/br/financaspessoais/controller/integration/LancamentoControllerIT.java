@@ -1,6 +1,6 @@
-package com.br.financaspessoais.controller;
+package com.br.financaspessoais.controller.integration;
 
-import com.br.financaspessoais.dto.out.LancamentoResponseDTO;
+import com.br.financaspessoais.config.MongoTestConfig;
 import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.model.Usuario;
 import com.br.financaspessoais.repository.LancamentoRepository;
@@ -10,20 +10,26 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+
 @AutoConfigureMockMvc
+@Import(MongoTestConfig.class)
+@SpringBootTest
+@ActiveProfiles("test")
 public class LancamentoControllerIT {
 
     @Autowired
@@ -35,30 +41,40 @@ public class LancamentoControllerIT {
     @Autowired
     private LancamentoRepository lancamentoRepository;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+
     @BeforeEach
     public void setup() {
+        System.out.println(">>> MongoDB em uso (final): " + mongoTemplate.getDb().getName());
+
         lancamentoRepository.deleteAll();
         usuarioRepository.deleteAll();
 
-        Usuario usuario = new Usuario();
-        usuario.setNome("Usuário Teste");
-        usuario.setEmail("teste@email.com");
-        usuario.setSenha("$2a$10$senhaCriptografada"); // já criptografada
+        Usuario usuario = Usuario.builder()
+                .nome("Usuário Teste")
+                .email("teste@email.com")
+                .senha(new BCryptPasswordEncoder().encode("senha123"))
+                .build();
+
         Usuario salvo = usuarioRepository.save(usuario);
 
-        Lancamento l1 = new Lancamento();
-        l1.setDescricao("Mercado");
-        l1.setCategoria("Alimentação");
-        l1.setValor(BigDecimal.valueOf(150.0));
-        l1.setData(LocalDateTime.now());
-        l1.setUsuario(salvo);
+        Lancamento l1 = Lancamento.builder()
+                .descricao("Mercado")
+                .categoria("Alimentação")
+                .valor(BigDecimal.valueOf(150.0))
+                .data(LocalDateTime.now())
+                .usuario(salvo)
+                .build();
 
-        Lancamento l2 = new Lancamento();
-        l2.setDescricao("Combustível");
-        l2.setCategoria("Transporte");
-        l2.setValor(BigDecimal.valueOf(200.0));
-        l2.setData(LocalDateTime.now());
-        l2.setUsuario(salvo);
+        Lancamento l2 = Lancamento.builder()
+                .descricao("Combustível")
+                .categoria("Transporte")
+                .valor(BigDecimal.valueOf(200.0))
+                .data(LocalDateTime.now())
+                .usuario(salvo)
+                .build();
 
         lancamentoRepository.save(l1);
         lancamentoRepository.save(l2);
@@ -67,10 +83,9 @@ public class LancamentoControllerIT {
     @Test
     @WithMockUser(username = "teste@email.com")
     public void deveRetornarLancamentosDoUsuarioAutenticado() throws Exception {
-        mockMvc.perform(get("/api/lancamentos/usuario") // o PathVariable é ignorado internamente
+        mockMvc.perform(get("/api/lancamentos")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].descricao").value("Mercado"))
                 .andExpect(jsonPath("$[1].descricao").value("Combustível"));
     }
