@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Document(collection = "lancamentos")
+@Document(collection = "lancamento")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -7,6 +7,7 @@ import com.br.financaspessoais.mapper.UsuarioMapper;
 import com.br.financaspessoais.model.Usuario;
 import com.br.financaspessoais.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,12 @@ public class UsuarioService {
 
     public UsuarioResponseDTO salvar(UsuarioRequestDTO usuarioRequestDTO) {
         Usuario usuario = usuarioMapper.toEntity(usuarioRequestDTO);
-        return usuarioMapper.toResponseDTO(usuarioRepository.save(usuario));
+
+        String senhaCriptografada = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
+        usuario.setSenha(senhaCriptografada);
+
+        Usuario usuarioSalvo = usuarioRepository.save(usuario);
+        return usuarioMapper.toResponseDTO(usuarioSalvo);
     }
 
     public List<UsuarioResponseDTO> listarUsuarios() {
