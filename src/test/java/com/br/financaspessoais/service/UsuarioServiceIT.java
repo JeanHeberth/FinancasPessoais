@@ -26,7 +26,7 @@ public class UsuarioServiceIT {
     @BeforeEach
     void limparBanco() {
         assertNotNull(usuarioRepository, "usuarioRepository não foi injetado");
-        usuarioRepository.deleteAll();
+//        usuarioRepository.deleteAll();
     }
 
     @Test
@@ -36,7 +36,7 @@ public class UsuarioServiceIT {
         UsuarioRequestDTO dto = new UsuarioRequestDTO();
         dto.setNome("Maria");
         dto.setEmail("maria@email.com");
-        dto.setSenha("senha123");
+        dto.setSenha("senha123456");
 
         // Act
         usuarioService.salvar(dto);

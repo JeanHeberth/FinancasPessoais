@@ -2,7 +2,6 @@ package com.br.financaspessoais.controller;
 
 import com.br.financaspessoais.dto.in.LancamentoRequestDTO;
 import com.br.financaspessoais.dto.out.LancamentoResponseDTO;
-import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.service.LancamentoService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -31,19 +31,19 @@ public class LancamentoController {
         return ResponseEntity.ok(salvo);
     }
 
-    @GetMapping
-    public List<LancamentoResponseDTO> listarTodos() {
-        return lancamentoService.listarTodos();
-    }
-
-    @GetMapping("/usuario/{usuarioId}")
-    public List<LancamentoResponseDTO> listarPorUsuario(@PathVariable String usuarioId) {
-        return lancamentoService.listarPorUsuario(usuarioId);
+    @GetMapping()
+    public List<LancamentoResponseDTO> listarPorUsuario() {
+        return lancamentoService.listarPorUsuarioLogado();
     }
 
     @GetMapping("/usuario/{usuarioId}/periodo")
-    public List<LancamentoResponseDTO> listarPorUsuarioEPeriodo(@PathVariable String usuarioId, @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio, @RequestParam("fim") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim) {
-        return lancamentoService.listarPorPeriodo(usuarioId, inicio, fim);
+    public List<LancamentoResponseDTO> listarPorUsuarioEPeriodo(@PathVariable @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio, @RequestParam("fim") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim) {
+        return lancamentoService.listarPorPeriodo(inicio, fim);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LancamentoResponseDTO> buscarPorId(@PathVariable String id) {
+        return ResponseEntity.ok(lancamentoService.buscarPorId(id));
     }
 
     @DeleteMapping("/{id}")
@@ -54,7 +54,7 @@ public class LancamentoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<LancamentoResponseDTO> atualizar(@PathVariable @Valid String id, @RequestBody LancamentoRequestDTO lancamentoRequestDto) {
-        return ResponseEntity.ok(lancamentoService.atualizar(id,lancamentoRequestDto));
+        return ResponseEntity.ok(lancamentoService.atualizar(id, lancamentoRequestDto));
     }
 }
 

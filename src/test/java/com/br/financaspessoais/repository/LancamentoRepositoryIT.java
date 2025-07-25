@@ -31,7 +31,6 @@ public class LancamentoRepositoryIT{
                 .data(LocalDateTime.now())
                 .tipo(TipoLancamento.SAIDA)
                 .categoria("Contas")
-                .usuarioId(usuarioId)
                 .build();
 
         lancamentoRepository.save(lancamento);
@@ -52,7 +51,6 @@ public class LancamentoRepositoryIT{
                 .data(LocalDateTime.of(2025, 7, 1, 10, 0)) // horário arbitrário
                 .tipo(TipoLancamento.ENTRADA)
                 .categoria("Renda")
-                .usuarioId(usuarioId)
                 .build());
 
         lancamentoRepository.save(Lancamento.builder()
@@ -61,7 +59,6 @@ public class LancamentoRepositoryIT{
                 .data(LocalDateTime.of(2025, 7, 10, 15, 30))
                 .tipo(TipoLancamento.SAIDA)
                 .categoria("Alimentação")
-                .usuarioId(usuarioId)
                 .build());
 
         LocalDateTime inicio = LocalDateTime.of(2025, 7, 1, 0, 0);
@@ -78,7 +75,6 @@ public class LancamentoRepositoryIT{
             System.out.println("Descrição: " + l.getDescricao());
             System.out.println("Data: " + l.getData());
             System.out.println("Tipo: " + l.getTipo());
-            System.out.println("Usuário: " + l.getUsuarioId());
             System.out.println("---");
         });
 

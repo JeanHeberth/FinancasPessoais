@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
 @Data
 public class LancamentoResponseDTO {
 
+    private String id;
     private String descricao;
     private BigDecimal valor;
     private LocalDateTime data;
     private TipoLancamento tipo;
     private String categoria;
-    private String usuarioId;
 
 
 
@@ -61,11 +61,11 @@ public class LancamentoResponseDTO {
         this.categoria = categoria;
     }
 
-    public String getUsuarioId() {
-        return usuarioId;
+    public String getId() {
+        return id;
     }
 
-    public void setUsuarioId(String usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setId(String id) {
+        this.id = id;
     }
 }

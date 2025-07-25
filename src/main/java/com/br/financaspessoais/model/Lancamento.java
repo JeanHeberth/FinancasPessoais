@@ -4,6 +4,7 @@ import com.br.financaspessoais.enums.TipoLancamento;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,5 +35,6 @@ public class Lancamento {
 
     private String categoria;
 
-    private String usuarioId;
+    @DBRef
+    private Usuario usuario;
 }
