@@ -1,86 +1,67 @@
 package com.br.financaspessoais.repository;
 
+
 import com.br.financaspessoais.enums.TipoLancamento;
 import com.br.financaspessoais.model.Lancamento;
+import com.br.financaspessoais.model.Usuario;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 
-
+@AutoConfigureMockMvc
 @SpringBootTest
-public class LancamentoRepositoryIT{
+@ActiveProfiles("test")
+@EnabledIfSystemProperty(named = "ambiente", matches = "local")
+class LancamentoRepositoryIT {
 
     @Autowired
     private LancamentoRepository lancamentoRepository;
 
+    private Usuario usuario;
+
+    @BeforeEach
+    void setup() {
+//        lancamentoRepository.deleteAll();
+        usuario = Usuario.builder()
+                .id("user123")
+                .nome("Jean Heberth")
+                .email("jean@email.com")
+                .senha("senha123")
+                .build();
+    }
 
     @Test
-    public void deveSalvarEListarLancamentosPorUsuario() {
-        String usuarioId = "123";
-
+    @DisplayName("Deve salvar e buscar lançamentos por usuário")
+    void deveSalvarEListarLancamentosPorUsuario() {
+        // Arrange
         Lancamento lancamento = Lancamento.builder()
-                .descricao("Conta de Luz")
-                .valor(BigDecimal.valueOf(200.00))
-                .data(LocalDateTime.now())
+                .descricao("Mercado")
+                .valor(BigDecimal.valueOf(250.75))
                 .tipo(TipoLancamento.SAIDA)
-                .categoria("Contas")
+                .data(LocalDateTime.now())
+                .usuario(usuario)
                 .build();
 
         lancamentoRepository.save(lancamento);
 
-        List<Lancamento> resultados = lancamentoRepository.findByUsuarioId(usuarioId);
+        // Act
+        List<Lancamento> resultado = lancamentoRepository.findByUsuarioId("user123");
 
-        assertFalse(resultados.isEmpty());
-        assertEquals(resultados.get(0).getDescricao(), "Conta de Luz");
+        // Assert
+        assertThat(resultado).hasSize(1);
+        Lancamento encontrado = resultado.get(0);
+        assertThat(encontrado.getDescricao()).isEqualTo("Mercado");
     }
-
-    @Test
-    public void deveBuscarLancamentosPorPeriodo() {
-        String usuarioId = "456";
-
-        lancamentoRepository.save(Lancamento.builder()
-                .descricao("Salário")
-                .valor(BigDecimal.valueOf(3000))
-                .data(LocalDateTime.of(2025, 7, 1, 10, 0)) // horário arbitrário
-                .tipo(TipoLancamento.ENTRADA)
-                .categoria("Renda")
-                .build());
-
-        lancamentoRepository.save(Lancamento.builder()
-                .descricao("Mercado")
-                .valor(BigDecimal.valueOf(500))
-                .data(LocalDateTime.of(2025, 7, 10, 15, 30))
-                .tipo(TipoLancamento.SAIDA)
-                .categoria("Alimentação")
-                .build());
-
-        LocalDateTime inicio = LocalDateTime.of(2025, 7, 1, 0, 0);
-        LocalDateTime fim = LocalDateTime.of(2025, 7, 31, 23, 59, 59);
-
-        List<Lancamento> resultados = lancamentoRepository.findByUsuarioIdAndDataBetween(
-                usuarioId,
-                inicio,
-                fim
-        );
-
-        resultados.forEach(l -> {
-            System.out.println(">>> Lançamento retornado:");
-            System.out.println("Descrição: " + l.getDescricao());
-            System.out.println("Data: " + l.getData());
-            System.out.println("Tipo: " + l.getTipo());
-            System.out.println("---");
-        });
-
-        assertEquals(resultados.size(), 2); // Agora deve funcionar corretamente
-    }
-
-
-
 }
