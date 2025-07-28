@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @EnabledIfSystemProperty(named = "ambiente", matches = "local")
-//@AutoConfigureWireMock(port = Options.DYNAMIC_PORT)
 public class LancamentoControllerIT {
 
     @Autowired
