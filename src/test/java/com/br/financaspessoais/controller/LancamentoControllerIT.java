@@ -1,4 +1,4 @@
-package com.br.financaspessoais.controller.integration;
+package com.br.financaspessoais.controller;
 
 import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.model.Usuario;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
