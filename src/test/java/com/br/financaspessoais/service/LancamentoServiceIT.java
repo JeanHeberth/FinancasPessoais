@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @EnabledIfSystemProperty(named = "ambiente", matches = "local")
-
 public class LancamentoServiceIT {
 
     private static final Logger log = LoggerFactory.getLogger(LancamentoServiceIT.class);
@@ -41,8 +40,6 @@ public class LancamentoServiceIT {
     @Autowired
     private LancamentoRepository lancamentoRepository;
 
-    @Autowired
-    private LancamentoMapper lancamentoMapper;
 
     @Autowired
     private MongoTemplate mongoTemplate;
