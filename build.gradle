@@ -67,6 +67,11 @@ test {
     systemProperty customMongoDBEmbeddedVersionProperty, customMongoDBEmbeddedVersion
     print "> Set property '${customMongoDBEmbeddedVersionProperty}' with value: '${customMongoDBEmbeddedVersion}'"
 
+    // Define propriedade para habilitar testes locais
+    if (!System.getenv().containsKey("GITHUB_ACTIONS")) {
+        systemProperty "ambiente", "local"
+    }
+
     useJUnitPlatform()
 
     testLogging {
