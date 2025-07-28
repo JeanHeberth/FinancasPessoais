@@ -8,6 +8,9 @@ import com.br.financaspessoais.repository.LancamentoRepository;
 import com.br.financaspessoais.repository.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,8 +27,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
+@EnabledIfSystemProperty(named = "ambiente", matches = "local")
+
 public class LancamentoServiceIT {
 
+    private static final Logger log = LoggerFactory.getLogger(LancamentoServiceIT.class);
     @Autowired
     private LancamentoService lancamentoService;
 

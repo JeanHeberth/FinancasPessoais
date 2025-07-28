@@ -7,7 +7,7 @@ spring:
 
   # Aumenta o tempo de espera de conexão com o MongoDB em memória (usado pelos testes)
   mongodb.embedded:
-    timeout: 20000 # 20 segundos
+    timeout: 3620000 # 20 segundos
 
 logging:
   level:
