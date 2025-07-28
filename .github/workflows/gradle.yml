@@ -32,6 +32,10 @@ jobs:
       - name: Build project (without tests)
         run: ./gradlew clean assemble
 
+      - name: Instalar dependências nativas (caso falte suporte ao Flapdoodle)
+        run: sudo apt-get update && sudo apt-get install -y libssl-dev libcurl4-openssl-dev
+
+
       - name: Upload Gradle problems report
         if: always()
         uses: actions/upload-artifact@v4
