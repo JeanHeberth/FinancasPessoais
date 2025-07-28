@@ -1,6 +1,5 @@
 package com.br.financaspessoais.controller.integration;
 
-import com.br.financaspessoais.config.MongoTestConfig;
 import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.model.Usuario;
 import com.br.financaspessoais.repository.LancamentoRepository;
@@ -27,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @AutoConfigureMockMvc
-@Import(MongoTestConfig.class)
 @SpringBootTest
 @ActiveProfiles("test")
 public class LancamentoControllerIT {
