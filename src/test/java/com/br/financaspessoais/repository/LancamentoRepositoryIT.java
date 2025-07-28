@@ -4,6 +4,7 @@ package com.br.financaspessoais.repository;
 import com.br.financaspessoais.enums.TipoLancamento;
 import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.model.Usuario;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
@@ -28,26 +29,22 @@ class LancamentoRepositoryIT {
     @Autowired
     private LancamentoRepository lancamentoRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
     private Usuario usuario;
 
-    @Test
-    @DisplayName("Deve salvar e buscar lançamentos por usuário")
-    void deveSalvarEListarLancamentosPorUsuario() {
-
-      Usuario usuario = usuarioRepository.save(Usuario.builder()
+    @BeforeEach
+    void setup() {
+//        lancamentoRepository.deleteAll();
+        usuario = Usuario.builder()
                 .id("user123")
                 .nome("Jean Heberth")
                 .email("jean@email.com")
                 .senha("senha123")
-                .build()
-      );
+                .build();
+    }
 
-
-
-
+    @Test
+    @DisplayName("Deve salvar e buscar lançamentos por usuário")
+    void deveSalvarEListarLancamentosPorUsuario() {
         // Arrange
         Lancamento lancamento = Lancamento.builder()
                 .descricao("Mercado")
@@ -60,11 +57,11 @@ class LancamentoRepositoryIT {
         lancamentoRepository.save(lancamento);
 
         // Act
-        List<Lancamento> resultado = lancamentoRepository.findAll();
+        List<Lancamento> resultado = lancamentoRepository.findByUsuarioId("user123");
 
         // Assert
-        assertThat(resultado).isNotEmpty();
-        assertThat(resultado.get(0).getUsuario()).isNotNull();
-        assertThat(resultado.get(0).getUsuario().getId()).isEqualTo(usuario.getId());
+        assertThat(resultado).hasSize(1);
+        Lancamento encontrado = resultado.get(0);
+        assertThat(encontrado.getDescricao()).isEqualTo("Mercado");
     }
 }
