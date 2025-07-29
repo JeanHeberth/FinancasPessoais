@@ -146,5 +146,6 @@ test {
 ## 👨‍💼 Autor
 
 Jean Heberth Souza Vieira  
-📧 jeanheberth19@gmail.com  
+📧 jeanheberth19@gmail.com 
+www.linkedin.com/in/jeanheberth
 📍 Brasil
