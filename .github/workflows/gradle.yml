@@ -118,8 +118,6 @@ jobs:
           with:
             name: gradle-test-report-integration
             path: build/reports/
-
-
   lint-check:
     name: Lint Check
     runs-on: ubuntu-latest
