@@ -130,7 +130,7 @@ test {
    ```bash
    ./gradlew bootRun
    ```
-4. Acesse em: [http://localhost:8080](http://localhost:8080)
+4. Acesse em: [http://localhost:8089](http://localhost:8089)
 
 ---
 
