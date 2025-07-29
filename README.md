@@ -123,7 +123,7 @@ test {
 1. Certifique-se de ter o Java 21 e MongoDB rodando localmente (ou use apenas os testes com o banco em memória).
 2. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/FinancasPessoais.git
+   git clone https://github.com/JeanHeberth/FinancasPessoais.git
    cd FinancasPessoais
    ```
 3. Rode o projeto:
