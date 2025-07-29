@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git url: 'https://github.com/JeanHeberth/FinancasPessoais.git', branch: 'main'
+                git url: 'https://github.com/JeanHeberth/FinancasPessoais.git', branch: 'develop'
             }
         }
 
