@@ -1,30 +1,55 @@
 pipeline {
     agent any
 
+    tools {
+        gradle 'Gradle_8' // Nome da versão configurada no Jenkins (altere se necessário)
+    }
+
+    environment {
+        GRADLE_OPTS = "-Dorg.gradle.jvmargs='-Xmx1024m'"
+    }
+
     stages {
-        stage('Checkout') {
+
+        stage('📦 Build') {
             steps {
-                git url: 'https://github.com/JeanHeberth/FinancasPessoais.git', branch: 'main'
-                git url: 'https://github.com/JeanHeberth/FinancasPessoais.git', branch: 'develop'
+                echo '🔧 Etapa de build iniciada...'
+                sh './gradlew clean build -x test'
             }
         }
 
-        stage('Build') {
+        stage('✅ Testes Automatizados') {
             steps {
-                sh './gradlew clean build'
-            }
-        }
-
-        stage('Test') {
-            steps {
+                echo '🧪 Rodando testes...'
                 sh './gradlew test'
+            }
+        }
+
+        stage('📊 Verificação de Qualidade') {
+            steps {
+                echo '🔍 Executando validações (check, lint, etc)...'
+                sh './gradlew check'
+            }
+        }
+
+        stage('🚀 Deploy (main)') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo '📤 Enviando build para produção...'
+                // Exemplo fictício
+                sh 'echo "Deploy finalizado com sucesso!"'
             }
         }
     }
 
     post {
-        always {
-            junit '**/build/test-results/test/*.xml'
+        success {
+            echo '✅ Pipeline concluído com sucesso!'
+        }
+        failure {
+            echo '❌ Falha durante o pipeline. Verifique os logs.'
         }
     }
 }
