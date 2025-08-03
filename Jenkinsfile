@@ -1,9 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        gradle 'Gradle_8' // Nome da versão configurada no Jenkins (altere se necessário)
-    }
 
     environment {
         GRADLE_OPTS = "-Dorg.gradle.jvmargs='-Xmx1024m'"
