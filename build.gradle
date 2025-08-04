@@ -54,6 +54,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.13.3'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.6.3'
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+
 }
 
 test {
@@ -78,4 +80,22 @@ test {
         events "passed", "skipped", "failed"
         exceptionFormat "full"
     }
+
+    tasks.register('unitTest', Test) {
+        description = 'Executa somente testes unitários'
+        group = 'verification'
+        useJUnitPlatform()
+        include '**/unit/**'
+    }
+
+    tasks.register('integrationTest', Test) {
+        description = 'Executa somente testes de integração'
+        group = 'verification'
+        useJUnitPlatform()
+        include '**/*IT.class'
+        shouldRunAfter 'unitTest'
+    }
+
+    check.dependsOn 'unitTest', 'integrationTest'
+
 }

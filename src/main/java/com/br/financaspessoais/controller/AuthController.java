@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -22,6 +23,9 @@ public class AuthController {
 
     private final UsuarioRepository usuarioRepository;
     private final JwtUtil jwtUtil;
+    private final BCryptPasswordEncoder bCrypt;
+
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
@@ -36,7 +40,7 @@ public class AuthController {
                     return new RuntimeException("Usuário não encontrado");
                 });
 
-        if (!BCrypt.checkpw(senha, usuario.getSenha())) {
+        if (!bCrypt.matches(senha, usuario.getSenha())) {
             log.warn("❌ Senha incorreta para e-mail: {}", email);
             throw new RuntimeException("Credenciais inválidas");
         }
