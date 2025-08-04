@@ -1,4 +1,4 @@
-package com.br.financaspessoais.controller;
+package com.br.financaspessoais.integration.controller;
 
 import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.model.Usuario;
