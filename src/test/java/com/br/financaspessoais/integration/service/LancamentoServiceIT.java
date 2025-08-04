@@ -1,11 +1,11 @@
-package com.br.financaspessoais.service;
+package com.br.financaspessoais.integration.service;
 
 import com.br.financaspessoais.dto.out.LancamentoResponseDTO;
-import com.br.financaspessoais.mapper.LancamentoMapper;
 import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.model.Usuario;
 import com.br.financaspessoais.repository.LancamentoRepository;
 import com.br.financaspessoais.repository.UsuarioRepository;
+import com.br.financaspessoais.service.LancamentoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;

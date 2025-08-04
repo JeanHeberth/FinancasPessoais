@@ -1,9 +1,10 @@
-package com.br.financaspessoais.repository;
+package com.br.financaspessoais.integration.repository;
 
 
 import com.br.financaspessoais.enums.TipoLancamento;
 import com.br.financaspessoais.model.Lancamento;
 import com.br.financaspessoais.model.Usuario;
+import com.br.financaspessoais.repository.LancamentoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
