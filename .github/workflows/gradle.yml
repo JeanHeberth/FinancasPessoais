@@ -38,7 +38,7 @@ jobs:
           name: gradle-problems-report
           path: build/reports/problems/
 
-test-unitarios:
+test-unit:
   test-controller:
     name: Controller Tests
     runs-on: ubuntu-latest
