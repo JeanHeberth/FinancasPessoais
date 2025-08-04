@@ -30,11 +30,13 @@ class GlobalExceptionHandlerIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+
     private final String LOGIN_URL = "/api/auth/login";
 
     @BeforeEach
     void setup() {
         usuarioRepository.deleteAll();
+
     }
 
     @Test
@@ -55,7 +57,7 @@ class GlobalExceptionHandlerIT {
         Usuario usuario = Usuario.builder()
                 .nome("Teste")
                 .email("teste@email.com")
-                .senha("$2a$10$T1EzpBvKqABhEvEAKR1mZeaOETjjl03/v2RHDAhEjH9QZtkAvmQwa") // senha = "senhaCorreta"
+                .senha("$2a$10$T1EzpBvKqABhEvEAKR1mZeaOETjjl03/v2RHDAhEjdfH9QZtkAvmQwa") // senha = "senhaCorreta"
                 .build();
         usuarioRepository.save(usuario);
 

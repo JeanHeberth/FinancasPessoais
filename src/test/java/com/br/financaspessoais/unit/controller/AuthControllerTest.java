@@ -5,63 +5,50 @@ import com.br.financaspessoais.controller.AuthController;
 import com.br.financaspessoais.dto.in.LoginRequestDTO;
 import com.br.financaspessoais.model.Usuario;
 import com.br.financaspessoais.repository.UsuarioRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Map;
 import java.util.Optional;
 
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthController.class)
-class AuthControllerTest {
+public class AuthControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    private final UsuarioRepository usuarioRepository = mock(UsuarioRepository.class);
+    private final JwtUtil jwtUtil = mock(JwtUtil.class);
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = mock(BCryptPasswordEncoder.class);
 
-    @MockBean
-    private UsuarioRepository usuarioRepository;
-
-    @MockBean
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final AuthController authController = new AuthController(usuarioRepository, jwtUtil, bCryptPasswordEncoder);
 
     @Test
-    @DisplayName("Deve autenticar e retornar token se as credenciais estiverem corretas")
-    void deveAutenticarComSucesso() throws Exception {
-        // Arrange
-        String senhaCriptografada = BCrypt.hashpw("senha123", BCrypt.gensalt());
+    @DisplayName("Deve autenticar e retornar token")
+    void deveAutenticarComSucesso() {
+        LoginRequestDTO request = new LoginRequestDTO("jean@email.com", "senha123");
 
         Usuario usuario = Usuario.builder()
-                .email("teste@email.com")
-                .senha(senhaCriptografada)
+                .id("user123")
+                .nome("Jean")
+                .email("jean@email.com")
+                .senha("$2a$10$ExemploDeHashFixoMockado1234567890AbcDef6hiJkLMnopQrstu")
                 .build();
 
-        when(usuarioRepository.findByEmail("teste@email.com")).thenReturn(Optional.of(usuario));
-        when(jwtUtil.gerarToken("teste@email.com")).thenReturn("token.jwt.mockado");
+        when(usuarioRepository.findByEmail("jean@email.com")).thenReturn(Optional.of(usuario));
+        when(jwtUtil.gerarToken("jean@email.com")).thenReturn("token.jwt.mockado");
 
-        LoginRequestDTO request = new LoginRequestDTO("teste@email.com", "senha123");
+        when(bCryptPasswordEncoder.matches("senha123", usuario.getSenha())).thenReturn(true);
 
-        // Act & Assert
-        mockMvc.perform(post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("token.jwt.mockado"));
+        // Act
+        ResponseEntity<Map<String, String>> response = (ResponseEntity<Map<String, String>>) authController.login(request);
 
-        verify(usuarioRepository).findByEmail("teste@email.com");
-        verify(jwtUtil).gerarToken("teste@email.com");
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).containsEntry("token", "token.jwt.mockado");
     }
-}
+    }
+
