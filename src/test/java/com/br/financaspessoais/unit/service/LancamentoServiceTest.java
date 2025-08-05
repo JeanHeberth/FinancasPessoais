@@ -95,14 +95,18 @@ class LancamentoServiceTest {
                 BigDecimal.valueOf(150.0),
                 LocalDateTime.now(),
                 TipoLancamento.SAIDA,
-                "Alimentação");
+                "Alimentação",
+                usuario.getNome().equals("jean@email.com") ? usuario : null
+                );
 
         LancamentoResponseDTO dto2 = new LancamentoResponseDTO("2",
                 "Combustivel",
                 BigDecimal.valueOf(200.0),
                 LocalDateTime.now(),
                 TipoLancamento.SAIDA,
-                "Transporte");
+                "Transporte",
+                usuario.getNome().equals("jean@email.com") ? usuario : null
+                );
 
         when(lancamentoMapper.toResponseDTO(l1)).thenReturn(dto1);
         when(lancamentoMapper.toResponseDTO(l2)).thenReturn(dto2);
