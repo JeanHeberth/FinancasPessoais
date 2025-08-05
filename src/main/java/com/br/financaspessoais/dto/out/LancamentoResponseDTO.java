@@ -1,6 +1,7 @@
 package com.br.financaspessoais.dto.out;
 
 import com.br.financaspessoais.enums.TipoLancamento;
+import com.br.financaspessoais.model.Usuario;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ public class LancamentoResponseDTO {
     private LocalDateTime data;
     private TipoLancamento tipo;
     private String categoria;
+    private Usuario usuario;
 
 
 
@@ -67,5 +69,13 @@ public class LancamentoResponseDTO {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

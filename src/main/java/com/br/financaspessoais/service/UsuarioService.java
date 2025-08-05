@@ -38,4 +38,9 @@ public class UsuarioService {
                 .toList();
     }
 
+    public Optional<UsuarioResponseDTO> buscarPorEmail(String email) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+        return usuario.map(usuarioMapper::toResponseDTO);
+    }
+
 }
