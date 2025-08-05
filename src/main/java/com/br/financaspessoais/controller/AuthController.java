@@ -8,11 +8,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Slf4j
 @RestController
@@ -23,29 +23,30 @@ public class AuthController {
 
     private final UsuarioRepository usuarioRepository;
     private final JwtUtil jwtUtil;
+    private final BCryptPasswordEncoder bCrypt;
+
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
-        log.info("🔐 Tentando autenticar o e-mail: {}", loginRequestDTO.getEmail());
+        final String email = loginRequestDTO.getEmail();
+        final String senha = loginRequestDTO.getSenha();
 
-        Usuario usuario = usuarioRepository.findByEmail(loginRequestDTO.getEmail())
+        log.info("🔐 Tentando autenticar o e-mail: {}", email);
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> {
-                    log.warn("❌ Usuário não encontrado: {}", loginRequestDTO.getEmail());
+                    log.warn("❌ Usuário não encontrado: {}", email);
                     return new RuntimeException("Usuário não encontrado");
                 });
 
-        log.debug("📥 Senha enviada: {}", loginRequestDTO.getSenha());
-        log.debug("📦 Senha armazenada: {}", usuario.getSenha());
-
-        boolean senhaOk = BCrypt.checkpw(loginRequestDTO.getSenha(), usuario.getSenha());
-
-        if (!senhaOk) {
-            log.warn("❌ Senha incorreta para e-mail: {}", loginRequestDTO.getEmail());
+        if (!bCrypt.matches(senha, usuario.getSenha())) {
+            log.warn("❌ Senha incorreta para e-mail: {}", email);
             throw new RuntimeException("Credenciais inválidas");
         }
 
-        String token = jwtUtil.gerarToken(usuario.getEmail());
-        log.info("✅ Token gerado com sucesso para {}: {}", usuario.getEmail(), token);
+        String token = jwtUtil.gerarToken(email);
+        log.info("✅ Token gerado com sucesso para {}: {}", email, token);
 
         return ResponseEntity.ok(Map.of("token", token));
     }

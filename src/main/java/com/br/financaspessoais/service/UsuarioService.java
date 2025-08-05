@@ -26,6 +26,7 @@ public class UsuarioService {
         String senhaCriptografada = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
         usuario.setSenha(senhaCriptografada);
 
+
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
         return usuarioMapper.toResponseDTO(usuarioSalvo);
     }
@@ -36,6 +37,11 @@ public class UsuarioService {
                 .stream()
                 .map(usuarioMapper::toResponseDTO)
                 .toList();
+    }
+
+    public Optional<UsuarioResponseDTO> buscarPorEmail(String email) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+        return usuario.map(usuarioMapper::toResponseDTO);
     }
 
 }

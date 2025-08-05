@@ -37,23 +37,23 @@ public class LancamentoController {
     }
 
     @GetMapping("/usuario/{usuarioId}/periodo")
-    public List<LancamentoResponseDTO> listarPorUsuarioEPeriodo(@PathVariable @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio, @RequestParam("fim") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim) {
+    public List<LancamentoResponseDTO> listarPorUsuarioEPeriodo(@PathVariable("usuarioId") String usuarioId, @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio, @RequestParam("fim") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim) {
         return lancamentoService.listarPorPeriodo(inicio, fim);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LancamentoResponseDTO> buscarPorId(@PathVariable String id) {
+    public ResponseEntity<LancamentoResponseDTO> buscarPorId(@PathVariable("id") String id) {
         return ResponseEntity.ok(lancamentoService.buscarPorId(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable String id) {
+    public ResponseEntity<Void> deletar(@PathVariable("id") String id) {
         lancamentoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LancamentoResponseDTO> atualizar(@PathVariable @Valid String id, @RequestBody LancamentoRequestDTO lancamentoRequestDto) {
+    public ResponseEntity<LancamentoResponseDTO> atualizar(@PathVariable("id") String id, @RequestBody LancamentoRequestDTO lancamentoRequestDto) {
         return ResponseEntity.ok(lancamentoService.atualizar(id, lancamentoRequestDto));
     }
 }
