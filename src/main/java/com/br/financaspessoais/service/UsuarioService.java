@@ -26,6 +26,7 @@ public class UsuarioService {
         String senhaCriptografada = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
         usuario.setSenha(senhaCriptografada);
 
+
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
         return usuarioMapper.toResponseDTO(usuarioSalvo);
     }
