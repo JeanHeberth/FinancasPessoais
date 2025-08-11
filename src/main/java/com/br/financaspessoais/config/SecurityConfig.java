@@ -25,6 +25,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // 🔓 Login permitido sem autenticação
                         .requestMatchers("/api/usuarios/**").permitAll() // 🔓 Registro permitido sem autenticação
+                        .requestMatchers("/api/password-reset/**").permitAll() // 🔓 Registro permitido sem autenticação
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

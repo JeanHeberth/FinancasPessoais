@@ -7,7 +7,7 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://localhost:27017/controle-gastos
+      uri: ${MONGO_URI_NUVEM}
       database: controle-gastos
 
   jackson:
@@ -15,11 +15,21 @@ spring:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_SENDER}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 jwt:
   secret: minha-chave-super-secreta-e-segura-minha-chave-super-secreta-e-segura
   expiration: 86400000
-
-
 
 logging:
   level:
