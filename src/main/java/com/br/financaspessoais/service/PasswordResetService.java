@@ -1,7 +1,7 @@
 package com.br.financaspessoais.service;
 
-
 import com.br.financaspessoais.model.PasswordResetToken;
+import com.br.financaspessoais.model.Usuario;
 import com.br.financaspessoais.repository.PasswordResetTokenRepository;
 import com.br.financaspessoais.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ public class PasswordResetService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final EmailService emailService;
-
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public void solicitarRedefinicaoSenha(String email) {
         var usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-
+        // Remove tokens anteriores, se houver
         passwordResetTokenRepository.deleteByEmail(email);
 
         String token = UUID.randomUUID().toString();
@@ -34,28 +34,29 @@ public class PasswordResetService {
                 .expiracao(LocalDateTime.now().plusHours(1))
                 .build();
 
-
         passwordResetTokenRepository.save(redefinicaoSenha);
 
         String link = "http://localhost:4200/redefinir-senha?token=" + token;
         String corpo = "Clique no link abaixo para redefinir sua senha: " + link;
+
         emailService.enviarEmail(email, "Redefinição de Senha", corpo);
     }
 
     public void redefinirSenha(String token, String novaSenha) {
-        var tokenValido = passwordResetTokenRepository.findByToken(token)
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Token inválido"));
 
-        if (tokenValido.getExpiracao().isBefore(LocalDateTime.now())) {
+        if (resetToken.getExpiracao().isBefore(LocalDateTime.now())) {
             throw new RuntimeException("Token expirado");
         }
 
-        var usuario = usuarioRepository.findByEmail(tokenValido.getEmail())
+        Usuario usuario = usuarioRepository.findByEmail(resetToken.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        usuario.setSenha(new BCryptPasswordEncoder().encode(novaSenha));
-        usuarioRepository.save(usuario);
-        passwordResetTokenRepository.delete(tokenValido);
-    }
+        String novaSenhaHash = bCryptPasswordEncoder.encode(novaSenha);
+        usuario.setSenha(novaSenhaHash);
 
+        usuarioRepository.save(usuario);
+        passwordResetTokenRepository.delete(resetToken);
+    }
 }
