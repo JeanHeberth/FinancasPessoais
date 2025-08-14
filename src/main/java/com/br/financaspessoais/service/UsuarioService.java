@@ -28,6 +28,10 @@ public class UsuarioService {
             throw new IllegalArgumentException("Senha muito fraca. Por favor, escolha uma senha mais forte.");
         }
 
+        if (usuarioRepository.findByEmail(usuarioRequestDTO.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email já cadastrado. Por favor, escolha outro email.");
+        }
+
         Usuario usuario = usuarioMapper.toEntity(usuarioRequestDTO);
 
         String senhaCriptografada = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
