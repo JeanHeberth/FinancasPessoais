@@ -12,6 +12,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -36,8 +37,11 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
+        configuration.setAllowedOriginPatterns(List.of("http://localhost*", "capacitor://localhost", "ionic://localhost", "http://localhost:4200"));
+
         // ✅ Permite requisições do frontend Angular
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+
 
         // ✅ Permite todos os métodos HTTP necessários
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
