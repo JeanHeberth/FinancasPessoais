@@ -24,9 +24,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ Configuração CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // 🔓 Login permitido sem autenticação
-                        .requestMatchers("/api/usuarios/**").permitAll() // 🔓 Registro permitido sem autenticação
-                        .requestMatchers("/api/password-reset/**").permitAll() // 🔓 Registro permitido sem autenticação
+                        .requestMatchers("/auth/**").permitAll() // 🔓 Login permitido sem autenticação
+                        .requestMatchers("/usuarios/**").permitAll() // 🔓 Registro permitido sem autenticação
+                        .requestMatchers("/password-reset/**").permitAll() // 🔓 Registro permitido sem autenticação
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
@@ -56,7 +56,7 @@ public class SecurityConfig {
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration);
+        source.registerCorsConfiguration("/**", configuration);
 
         return source;
     }

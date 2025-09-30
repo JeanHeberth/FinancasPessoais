@@ -31,7 +31,7 @@ class GlobalExceptionHandlerIT {
     private ObjectMapper objectMapper;
 
 
-    private final String LOGIN_URL = "/api/auth/login";
+    private final String LOGIN_URL = "/auth/login";
 
     @BeforeEach
     void setup() {

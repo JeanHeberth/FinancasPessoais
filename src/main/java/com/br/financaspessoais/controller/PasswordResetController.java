@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/password-reset")
+@RequestMapping("/password-reset")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class PasswordResetController {

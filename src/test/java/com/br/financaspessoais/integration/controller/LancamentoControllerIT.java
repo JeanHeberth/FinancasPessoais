@@ -81,7 +81,7 @@ public class LancamentoControllerIT {
     @Test
     @WithMockUser(username = "teste@email.com")
     public void deveRetornarLancamentosDoUsuarioAutenticado() throws Exception {
-        mockMvc.perform(get("/api/lancamentos")
+        mockMvc.perform(get("/lancamentos")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].descricao").value("Mercado"))
