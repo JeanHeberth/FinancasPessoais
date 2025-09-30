@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'war'
     id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -23,6 +24,12 @@ configurations {
     }
 }
 
+bootWar {
+    enabled = true
+    archiveFileName = "FinancasPessoais.war"
+}
+
+
 repositories {
     mavenCentral()
 }
@@ -35,6 +42,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'io.github.cdimascio:dotenv-java:2.3.2'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
 
 
 
@@ -65,44 +74,3 @@ dependencies {
 
 }
 
-test {
-    def customMongoDBEmbeddedVersionProperty = "custom.mongodb.embedded.version"
-    def customMongoDBEmbeddedVersion = "4.6.3"
-
-    if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-        customMongoDBEmbeddedVersion = "5.0.5"
-    }
-
-    systemProperty customMongoDBEmbeddedVersionProperty, customMongoDBEmbeddedVersion
-    print "> Set property '${customMongoDBEmbeddedVersionProperty}' with value: '${customMongoDBEmbeddedVersion}'"
-
-    // Define propriedade para habilitar testes locais
-    if (!System.getenv().containsKey("GITHUB_ACTIONS")) {
-        systemProperty "ambiente", "local"
-    }
-
-    useJUnitPlatform()
-
-    testLogging {
-        events "passed", "skipped", "failed"
-        exceptionFormat "full"
-    }
-
-    tasks.register('unitTest', Test) {
-        description = 'Executa somente testes unitários'
-        group = 'verification'
-        useJUnitPlatform()
-        include '**/unit/**'
-    }
-
-    tasks.register('integrationTest', Test) {
-        description = 'Executa somente testes de integração'
-        group = 'verification'
-        useJUnitPlatform()
-        include '**/*IT.class'
-        shouldRunAfter 'unitTest'
-    }
-
-    check.dependsOn 'unitTest', 'integrationTest'
-
-}

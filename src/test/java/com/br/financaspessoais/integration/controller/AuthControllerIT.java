@@ -31,7 +31,7 @@ class AuthControllerIT {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static final String LOGIN_URL = "/api/auth/login";
+    private static final String LOGIN_URL = "/auth/login";
 
     @BeforeEach
     void setup() {

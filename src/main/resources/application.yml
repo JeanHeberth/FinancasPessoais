@@ -1,5 +1,8 @@
 server:
+  address: 0.0.0.0
   port: 8089
+  servlet:
+    context-path: /FinancasPessoais/api
 
 spring:
   application:
@@ -7,7 +10,7 @@ spring:
 
   data:
     mongodb:
-      uri: ${MONGO_URI_NUVEM}
+      uri: mongodb+srv://admin:LuizJoao123@cluster.y2vw5.mongodb.net/
       database: controle-gastos
 
   jackson:
@@ -18,8 +21,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${EMAIL_SENDER}
-    password: ${EMAIL_PASSWORD}
+    username: jeanheberth19@gmail.com
+    password: blstjfpejsggvlnz
     properties:
       mail:
         smtp:
